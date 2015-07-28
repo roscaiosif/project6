@@ -5,23 +5,20 @@
  * use of. It also uses the Handlebars templating library and
  * jQuery.
  */
-
 // The names and URLs to all of the feeds we'd like available.
-var allFeeds = [
-    {
-        name: 'Udacity Blog',
-        url: 'http://blog.udacity.com/feeds/posts/default?alt=rss'
-    }, {
-        name: 'CSS Tricks',
-        url: 'http://feeds.feedburner.com/CssTricks'//'http://css-tricks.com/feed'
-    }, {
-        name: 'HTML5 Rocks',
-        url: 'http://feeds.feedburner.com/html5rocks'
-    }, {
-        name: 'Linear Digressions',
-        url: 'http://feeds.feedburner.com/udacity-linear-digressions'
-    }
-];
+var allFeeds = [{
+    name: 'Udacity Blog',
+    url: 'http://blog.udacity.com/feeds/posts/default?alt=rss'
+}, {
+    name: 'CSS Tricks',
+    url: 'http://feeds.feedburner.com/CssTricks' //'http://css-tricks.com/feed'
+}, {
+    name: 'HTML5 Rocks',
+    url: 'http://feeds.feedburner.com/html5rocks'
+}, {
+    name: 'Linear Digressions',
+    url: 'http://feeds.feedburner.com/udacity-linear-digressions'
+}];
 
 /* This function starts up our application. The Google Feed
  * Reader API is loaded asynchonously and will then call this
@@ -61,10 +58,10 @@ function loadFeed(id, cb) {
                 title = $('.header-title'),
                 entries = result.feed.entries,
                 entriesLen = entries.length;
-                //entryTemplate = Handlebars.compile($('.tpl-entry').html());
+            //entryTemplate = Handlebars.compile($('.tpl-entry').html());
 
-            title.html(feedName);   // Set the header text
-            container.empty();      // Empty out all previous entries
+            title.html(feedName); // Set the header text
+            container.empty(); // Empty out all previous entries
 
             /* Loop through the entries we just loaded via the Google
              * Feed Reader API. We'll then parse that entry against the
@@ -75,9 +72,13 @@ function loadFeed(id, cb) {
                 container.append(entryTemplate(entry));
             });
         } else {
-            console.log(feedName,' : ',result.error.message);
+            console.log(feedName, ' : ', result.error.message);
             container.empty();
-            container.append(entryTemplate({link:'#',title:'Not Found',contentSnippet:''}));
+            container.append(entryTemplate({
+                link: '#',
+                title: 'Not Found',
+                contentSnippet: ''
+            }));
         }
         if (cb) {
             cb();

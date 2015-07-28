@@ -3,18 +3,15 @@
  * This is the spec file that Jasmine will read and contains
  * all of the tests that will be run against your application.
  */
-
 /* We're placing all of our tests within the $() function,
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
 $(function() {
     /* This is our first test suite - a test suite just contains
-    * a related set of tests. This suite is all about the RSS
-    * feeds definitions, the allFeeds variable in our application.
-    */
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
-
+     * a related set of tests. This suite is all about the RSS
+     * feeds definitions, the allFeeds variable in our application.
+     */
     describe('RSS Feeds', function() {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
@@ -29,46 +26,46 @@ $(function() {
         });
 
         /* test for one feed/property*/
-         function testOneFeed(feed, prop){
-            var str = 'and feed['+ feed.id + '] has '+ prop +' defined';
-            it(str, function(){
-               expect(feed[prop]).toBeDefined();
-               expect(feed[prop]).not.toBe('');
+        function testOneFeed(feed, prop) {
+            var str = 'and feed[' + feed.id + '] has ' + prop + ' defined';
+            it(str, function() {
+                expect(feed[prop]).toBeDefined();
+                expect(feed[prop]).not.toBe('');
             });
-         }
+        }
         /* Loop through each feed
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
 
-         for(var i =0; i < allFeeds.length; i++){
+        for (var i = 0; i < allFeeds.length; i++) {
             testOneFeed(allFeeds[i], 'url');
-         }
+        }
 
         /* Loop through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-         for(var i =0; i < allFeeds.length; i++){
+        for (var i = 0; i < allFeeds.length; i++) {
             testOneFeed(allFeeds[i], 'name');
-         }
+        }
     });
 
 
     /* Test suite named "The menu" */
-    describe('The menu', function(){
+    describe('The menu', function() {
         /* The menu element is hidden by default.
          */
-         it('is hidden by default', function(){
+        it('is hidden by default', function() {
             expect($('body').hasClass('menu-hidden')).toBe(true);
-         })
+        })
 
-         /* The menu changes visibility when the menu icon is clicked. This test
-          * has two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
+        /* The menu changes visibility when the menu icon is clicked. This test
+         * has two expectations: does the menu display when
+         * clicked and does it hide when clicked again.
+         */
 
-         it('shows when the menu-icon is clicked and hides it when is clicked again', function(){
+        it('shows when the menu-icon is clicked and hides it when is clicked again', function() {
             $('.menu-icon-link').trigger('click');
             hiddenAfterClick = $('body').hasClass('menu-hidden');
             expect(hiddenAfterClick).toBe(false);
@@ -76,55 +73,53 @@ $(function() {
             hiddenAfterClick = $('body').hasClass('menu-hidden');
             expect(hiddenAfterClick).toBe(true);
 
-         });
+        });
 
     });
 
     /* Test suite "Initial Entries" */
-
-    describe('Initial Entry', function(){
+    describe('Initial Entry', function() {
         /* Test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          */
-        var feedEntries =[], //store the first .entry of each feed
-            index =0; //index for feeds
+        var feedEntries = [], //store the first .entry of each feed
+            index = 0; //index for feeds
 
         beforeEach(function(done) {
             loadFeed(index, function() {
-                var titles =$('.entry').find('h2');
+                var titles = $('.entry').find('h2');
                 feedEntries.push(titles[0].innerText);
                 done();
             });
         });
 
         function oneFeed(feed) {
-            it('"' + feed.name + '" has at least a single .entry element',function(done) {
+            it('"' + feed.name + '" has at least a single .entry element', function(done) {
                 expect(feedEntries[feed.id]).not.toEqual('Not Found');
                 index++;
                 done();
             });
         }
 
-         for(var i =0; i < allFeeds.length; i++) {
+        for (var i = 0; i < allFeeds.length; i++) {
             oneFeed(allFeeds[i]);
-         }
+        }
 
     });
 
     /* Test suite "New Feed Selection"*/
-    describe('New Feed Selection',function(){
+    describe('New Feed Selection', function() {
         /* Test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
-
-        var feedEntries =[], //store the first .entry of each feed
-            index =0; //index for feeds
-            feeds = allFeeds.length-1;
+        var feedEntries = [], //store the first .entry of each feed
+            index = 0; //index for feeds
+        feeds = allFeeds.length - 1;
 
         beforeEach(function(done) {
             loadFeed(index, function() {
-                var titles =$('.entry').find('h2');
+                var titles = $('.entry').find('h2');
                 feedEntries.push(titles[0].innerText);
                 done();
             });
@@ -132,20 +127,20 @@ $(function() {
 
         function oneFeed(feed) {
             var one = 1;
-            if (feed.id === feeds){
+            if (feed.id === feeds) {
                 one = -feeds;
             }
-            it('content changed upon loading "' + feed.name + '"',function(done) {
+            it('content changed upon loading "' + feed.name + '"', function(done) {
                 expect(feedEntries[feed.id]).not.toEqual('Not Found');
-                expect(feedEntries[feed.id+one] !== feedEntries[feed.id]).toBeTruthy();
+                expect(feedEntries[feed.id + one] !== feedEntries[feed.id]).toBeTruthy();
                 index++;
                 done();
             });
         }
 
-         for(var i = 0; i < allFeeds.length; i++) {
+        for (var i = 0; i < allFeeds.length; i++) {
             oneFeed(allFeeds[i]);
-         }
+        }
 
     });
 }());
