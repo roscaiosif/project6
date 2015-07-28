@@ -3,8 +3,8 @@
 1. The test loops through each feed in the allFeeds object and ensures it has a URL and name defined and that the URL and name is not empty. In order to loop though the feeds the 'it' function was wrapped in a function 'testOneFeed'
 
 2. Test suite "The menu"
-- Test that ensures the menu element is hidden by default is done by checking the 'menu-hidden' class on the 'body' tag. 
-- Test that ensures the menu changes visibility when the menu icon is clicked is done by triggering the click event for the 'menu-icon-link' and checking for 'menu-hidden' class on the 'body' tag. 
+- Test that ensures the menu element is hidden by default is done by checking the 'menu-hidden' class on the 'body' tag.
+- Test that ensures the menu changes visibility when the menu icon is clicked is done by triggering the click event for the 'menu-icon-link' and checking for 'menu-hidden' class on the 'body' tag.
 
 3. Test suite "Initial Entries"
 Test that ensures when the loadFeed function is called and completes its work, there is at least a single .entry element within the .feed container is done:
