@@ -13,7 +13,7 @@ var allFeeds = [
         url: 'http://blog.udacity.com/feeds/posts/default?alt=rss'
     }, {
         name: 'CSS Tricks',
-        url: 'http://css-tricks.com/feed'
+        url: 'http://feeds.feedburner.com/CssTricks'//'http://css-tricks.com/feed'
     }, {
         name: 'HTML5 Rocks',
         url: 'http://feeds.feedburner.com/html5rocks'
@@ -43,7 +43,9 @@ function init() {
 function loadFeed(id, cb) {
     var feedUrl = allFeeds[id].url,
         feedName = allFeeds[id].name,
-        feed = new google.feeds.Feed(feedUrl);
+        feed = new google.feeds.Feed(feedUrl),
+        entryTemplate = Handlebars.compile($('.tpl-entry').html()),
+        container = $('.feed');
 
     /* Load the feed using the Google Feed Reader API.
      * Once the feed has been loaded, the callback function
@@ -55,11 +57,11 @@ function loadFeed(id, cb) {
              * get started making the DOM manipulations required
              * to display the feed entries on screen.
              */
-            var container = $('.feed'),
+            var //container = $('.feed'),
                 title = $('.header-title'),
                 entries = result.feed.entries,
-                entriesLen = entries.length,
-                entryTemplate = Handlebars.compile($('.tpl-entry').html());
+                entriesLen = entries.length;
+                //entryTemplate = Handlebars.compile($('.tpl-entry').html());
 
             title.html(feedName);   // Set the header text
             container.empty();      // Empty out all previous entries
@@ -72,8 +74,11 @@ function loadFeed(id, cb) {
             entries.forEach(function(entry) {
                 container.append(entryTemplate(entry));
             });
+        } else {
+            console.log(feedName,' : ',result.error.message);
+            container.empty();
+            container.append(entryTemplate({link:'#',title:'Not Found',contentSnippet:''}));
         }
-
         if (cb) {
             cb();
         }
@@ -106,7 +111,6 @@ $(function() {
     allFeeds.forEach(function(feed) {
         feed.id = feedId;
         feedList.append(feedItemTemplate(feed));
-
         feedId++;
     });
 

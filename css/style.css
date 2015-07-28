@@ -1,4 +1,4 @@
-*,
+menu-icon-link,
 *:after,
 *:before: {
     box-sizing: inherit;
@@ -57,7 +57,7 @@ h2 {
     height: 100%;
     width: 10em;
     transform: translate3d(0, 0, 0);
-    transition: transform 0.2s;
+    transition: transform 0.5s;
 }
 
 .menu ul {
@@ -76,10 +76,15 @@ h2 {
     padding: 0.5em 0;
 }
 
+.menu li a:hover {
+    background: #6caf50;
+}
+
 .menu-hidden .menu {
     transform: translate3d(-12em, 0, 0);
-    transition: transform 0.2s;
+    transition: transform 0.5s;
 }
+
 
 .feed {
     margin: 4em 0 0;
