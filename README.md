@@ -16,4 +16,4 @@ Test that ensures when the `loadFeed` function is called and completes its work,
 d. Test suite "New Feed Selection"
 This test suite is pretty much the same as the previous one. The only difference is that after we use the `feedEntries` array to check if the content changed between loadings
 
-# To run the tests load `index.html` in a browser
+### To run the tests load `index.html` in a browser
