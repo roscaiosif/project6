@@ -37,7 +37,7 @@ $(function() {
         }
         /* Loop through each feed
          * in the allFeeds object and ensures it has a URL and name are defined
-         * and that the URL and namre are not empty.
+         * and that the URL and name are not empty.
          */
         for (var i = 0; i < allFeeds.length; i++) {
             testOneFeed(allFeeds[i], 'url');
