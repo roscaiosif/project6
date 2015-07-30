@@ -12,6 +12,8 @@ $(function() {
      * a related set of tests. This suite is all about the RSS
      * feeds definitions, the allFeeds variable in our application.
      */
+    "use strict";
+
     describe('RSS Feeds', function() {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
@@ -34,23 +36,14 @@ $(function() {
             });
         }
         /* Loop through each feed
-         * in the allFeeds object and ensures it has a URL defined
-         * and that the URL is not empty.
+         * in the allFeeds object and ensures it has a URL and name are defined
+         * and that the URL and namre are not empty.
          */
-
         for (var i = 0; i < allFeeds.length; i++) {
             testOneFeed(allFeeds[i], 'url');
-        }
-
-        /* Loop through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
-         */
-        for (var i = 0; i < allFeeds.length; i++) {
             testOneFeed(allFeeds[i], 'name');
         }
     });
-
 
     /* Test suite named "The menu" */
     describe('The menu', function() {
@@ -58,7 +51,7 @@ $(function() {
          */
         it('is hidden by default', function() {
             expect($('body').hasClass('menu-hidden')).toBe(true);
-        })
+        });
 
         /* The menu changes visibility when the menu icon is clicked. This test
          * has two expectations: does the menu display when
@@ -67,14 +60,12 @@ $(function() {
 
         it('shows when the menu-icon is clicked and hides it when is clicked again', function() {
             $('.menu-icon-link').trigger('click');
-            hiddenAfterClick = $('body').hasClass('menu-hidden');
+            var hiddenAfterClick = $('body').hasClass('menu-hidden');
             expect(hiddenAfterClick).toBe(false);
             $('.menu-icon-link').trigger('click');
             hiddenAfterClick = $('body').hasClass('menu-hidden');
             expect(hiddenAfterClick).toBe(true);
-
         });
-
     });
 
     /* Test suite "Initial Entries" */
@@ -113,9 +104,11 @@ $(function() {
         /* Test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
-        var feedEntries = [], //store the first .entry of each feed
-            index = 0; //index for feeds
-        feeds = allFeeds.length - 1;
+        var feedEntries = ['before the first feed is loaded'], //store the first .entry of each feed;
+            //the first entry in the array represents a dummy variable, so we do not have to compare to undefined
+
+            index = 0, //index for feeds
+            feeds = allFeeds.length - 1;
 
         beforeEach(function(done) {
             loadFeed(index, function() {
@@ -126,19 +119,15 @@ $(function() {
         });
 
         function oneFeed(feed) {
-            var one = 1;
-            if (feed.id === feeds) {
-                one = -feeds;
-            }
             it('content changed upon loading "' + feed.name + '"', function(done) {
-                expect(feedEntries[feed.id]).not.toEqual('Not Found');
-                expect(feedEntries[feed.id + one] !== feedEntries[feed.id]).toBeTruthy();
+                expect(feedEntries[feed.id + 1]).not.toEqual('Not Found');
+                expect(feedEntries[feed.id] !== feedEntries[feed.id + 1]).toBeTruthy();
                 index++;
                 done();
             });
         }
 
-        for (var i = 0; i < allFeeds.length; i++) {
+        for (var i = 0; i <= feeds; i++) {
             oneFeed(allFeeds[i]);
         }
 
