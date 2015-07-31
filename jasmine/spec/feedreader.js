@@ -27,22 +27,21 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 
-        /* test for one feed/property*/
-        function testOneFeed(feed, prop) {
-            var str = 'and feed[' + feed.id + '] has ' + prop + ' defined';
-            it(str, function() {
-                expect(feed[prop]).toBeDefined();
-                expect(feed[prop]).not.toBe('');
+        //all feeds have 'url' defined and not empty
+        it('and all feeds have url defined and not empty', function() {
+            allFeeds.forEach(function(feed) {
+                expect(feed.url).toBeDefined();
+                expect(feed.url).not.toBe('');
             });
-        }
-        /* Loop through each feed
-         * in the allFeeds object and ensures it has a URL and name are defined
-         * and that the URL and namre are not empty.
-         */
-        for (var i = 0; i < allFeeds.length; i++) {
-            testOneFeed(allFeeds[i], 'url');
-            testOneFeed(allFeeds[i], 'name');
-        }
+        });
+
+        //all feeds have 'name' defined and not empty
+        it('and all feeds have name defined and not empty', function() {
+            allFeeds.forEach(function(feed) {
+                expect(feed.name).toBeDefined();
+                expect(feed.name).not.toBe('');
+            });
+        });
     });
 
     /* Test suite named "The menu" */
@@ -73,30 +72,36 @@ $(function() {
         /* Test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
-         */
-        var feedEntries = [], //store the first .entry of each feed
-            index = 0; //index for feeds
+
+         * loadFeed requires an 'id' parameter and 'beforeEach' cannot
+         * be inside a loop therefore 'id' is incremented inside each
+         * 'it' to allow the next feed to be loaded
+         * on ajax success the feed's first entry is stored in 'feedEntryH2'
+         * on ajax failure 'feedEntry.h2' will contain 'Not Found'
+         * it is expected that 'feedEntry.count' not toEqual '0' and
+         * and 'feedEntry.h2' not toEqual 'Not Found'
+        */
+
+        var feedEntry = {},
+            id = 0;
 
         beforeEach(function(done) {
-            loadFeed(index, function() {
+            loadFeed(id, function() {
                 var titles = $('.entry').find('h2');
-                feedEntries.push(titles[0].innerText);
+                feedEntry.h2 = titles[0].innerText;
+                feedEntry.count = titles.length;
                 done();
             });
         });
 
-        function oneFeed(feed) {
+        allFeeds.forEach(function(feed) {
             it('"' + feed.name + '" has at least a single .entry element', function(done) {
-                expect(feedEntries[feed.id]).not.toEqual('Not Found');
-                index++;
+                expect(feedEntry.h2).not.toEqual('Not Found');
+                expect(feedEntry.count).not.toEqual(0);
+                id++;
                 done();
             });
-        }
-
-        for (var i = 0; i < allFeeds.length; i++) {
-            oneFeed(allFeeds[i]);
-        }
-
+        });
     });
 
     /* Test suite "New Feed Selection"*/
@@ -104,32 +109,32 @@ $(function() {
         /* Test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
-        var feedEntries = ['before the first feed is loaded'], //store the first .entry of each feed;
-            //the first entry in the array represents a dummy variable, so we do not have to compare to undefined
-
-            index = 0, //index for feeds
-            feeds = allFeeds.length - 1;
+        /* 1. First 'loadFeed' called with 'id' = 0 in 'beforeEach' and the '.entry h2' is stored in 'feedEntry0'
+         *  2. $.empty() is called to ensure clean container for the next load
+         *  3. The second 'loadFeed'  with 'id' = 1 is called inside the 'cb' function of the first 'loadFeed'
+         *     (this will mimic a click on the 2nd feed link) and the '.entry h2' is stored in 'feedEntry1'
+         *  4. call done();
+         *  5. it is expected that 'feedEntry0' is not toEqual 'feedEntry1'
+         */
+        var feedEntry0, feedEntry1;
 
         beforeEach(function(done) {
-            loadFeed(index, function() {
+            loadFeed(0, function() {
                 var titles = $('.entry').find('h2');
-                feedEntries.push(titles[0].innerText);
-                done();
+                feedEntry0 = titles[0].innerText;
+                titles.empty();
+                loadFeed(1, function() {
+                    var titles = $('.entry').find('h2');
+                    feedEntry1 = titles[0].innerText;
+                    done();
+                });
+
             });
         });
 
-        function oneFeed(feed) {
-            it('content changed upon loading "' + feed.name + '"', function(done) {
-                expect(feedEntries[feed.id + 1]).not.toEqual('Not Found');
-                expect(feedEntries[feed.id] !== feedEntries[feed.id + 1]).toBeTruthy();
-                index++;
-                done();
-            });
-        }
-
-        for (var i = 0; i <= feeds; i++) {
-            oneFeed(allFeeds[i]);
-        }
-
+        it('content changed upon loading a new feed', function(done) {
+            expect(feedEntry0).not.toEqual(feedEntry1);
+            done();
+        });
     });
 }());
