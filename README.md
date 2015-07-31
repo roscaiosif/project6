@@ -14,7 +14,7 @@ Test that ensures when the `loadFeed` function is called and completes its work,
  - it is expected that `feedEntry.count` not toEqual '0' and `feedEntry.h2` not toEqual `Not Found`
 
 d. Test suite "New Feed Selection"
- - this test is based on two nested `loadFeed` function that mimics a click event
+ - this test is based on two nested `loadFeed` functions that mimic a click event
  - the first `loadFeed` is called with `id = 0` in `beforeEach` and the `.entry h2` is stored in `feedEntry0`,
  - $.empty() is called to ensure clean container for the next load
  - the second `loadFeed`  with `id = 1` is called inside the `cb` function of the first `loadFeed` and the `.entry h2` is stored in `feedEntry1`
