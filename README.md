@@ -20,4 +20,4 @@ d. Test suite "New Feed Selection"
  - the second `loadFeed`  with `id = 1` is called inside the `cb` function of the first `loadFeed` and the `.entry h2` is stored in `feedEntry1`
  - it is expected that `feedEntry0` is not toEqual `feedEntry1`
 
-# To run the tests load `index.html` in a browser
+### To run the tests load `index.html` in a browser
